@@ -1,0 +1,25 @@
+!
+!
+! # get into global configuration mode
+conf t
+! 
+! 
+! # configure ftp username and password 
+ip ftp username gnu-ftp01
+ip ftp password Passw0rd!23
+!
+!
+! # if loopback interface is used as management network, configure the following
+ip tftp source-interface Loopback0
+ip ftp source-interface Loopback0
+!
+!
+! # define archive path with its hostname and current timestamp 
+! # write-memory is to trigger ftp backup whenever wr command input
+! # time-period is to trigger ftp backup every week (1440 minutes = 1 day)
+archive
+ path ftp://192.168.105.10/$h-$t
+ write-memory
+ time-period 1440
+!
+!

@@ -1,0 +1,30 @@
+# configure ftp server, username and password
+ :local ftphost "192.168.105.10"
+ :local ftpuser "gnu-ftp01"
+ :local ftppassword "Passw0rd!23"
+
+# get the current date and time
+:local GDate [/system clock get date]
+:local GDay [ :pick $GDate 4 6 ]
+:local GMonth [ :pick $GDate 0 3 ]
+:local GYear [ :pick $GDate 7 11 ]
+:local GTime [/system clock get time]
+:local GResult "$GDay-$GMonth-$GYear-$GTime"
+
+# format the file name for config export
+:local ExportConf ([/system identity get name].".rsc")
+:log info $ExportConf
+
+# backup the existing configuration
+/export compact file=$ExportConf
+:log info message="Config export finished."
+
+# upload the configuration to ftp server
+:log info message="Uploading config export."
+/tool fetch address="$ftphost" src-path=$ExportConf user="$ftpuser" mode=ftp password="$ftppassword" dst-path="$GResult-$ExportConf" upload=yes
+
+# delay 3 seconds to trigger the upload
+:delay 3s;
+
+# feedback the user if it is completed successfully
+:log info message="Configuration backup finished.";

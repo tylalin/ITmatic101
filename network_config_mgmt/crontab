@@ -1,0 +1,6 @@
+@daily /opt/scripts/housekeeping.sh
+@weekly /usr/bin/find /configs/cisco -ctime +180 -exec rm {} \;
+@weekly /usr/bin/find /configs/hpe -ctime +180 -exec rm {} \;
+@weekly /usr/bin/find /configs/huawei -ctime +180 -exec rm {} \;
+@weekly /usr/bin/find /configs/mikrotik -ctime +180 -exec rm {} \;
+@weekly /usr/bin/find /configs/fortigate -ctime +180 -exec rm {} \;

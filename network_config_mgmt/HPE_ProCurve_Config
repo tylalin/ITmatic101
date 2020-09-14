@@ -1,0 +1,22 @@
+# get into system-view which is equivalent of configure terminal in Cisco
+system-view
+
+# create a job called save and its commands sequence
+scheduler job save
+command 1 save safely force
+
+# create a job called tftp and its commands sequence
+scheduler job tftp
+command 1 tftp 192.168.105.10 put flash:/startup.cfg gnu-ce01.cfg source interface LoopBack 0
+
+# create a schedule called save to trigger job save with its interval 
+scheduler schedule save
+job save
+time repeating interval 1440
+quit
+
+# create a schedule called tftp to trigger job tftp with its interval  
+scheduler schedule tftp
+job tftp
+time repeating interval 1445
+quit

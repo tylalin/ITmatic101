@@ -1,0 +1,8 @@
+# get into system-view which is equivalent of configure terminal in Cisco
+system-view
+
+# configure all ftp related settings for saving configuration
+set save-configuration backup-to-server server 192.168.105.10 transport-type ftp user gnu-ftp01 password Passw0rd!23
+
+# set interval for save-configuration
+set save-configuration interval 1440 delay 2 cpu-limit 60

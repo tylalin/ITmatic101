@@ -1,0 +1,11 @@
+# configure an auto-script to trigger a config backup file to ftp
+config system auto-script 
+    edit "backup" 
+        set interval 86400
+        set repeat 0 
+        set start auto 
+        set script " 
+            config global 
+            execute backup config ftp fw01.conf 192.168.105.10 gnu-ftp01 Passw0rd!23"
+    next 
+end

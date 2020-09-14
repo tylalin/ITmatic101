@@ -1,0 +1,44 @@
+# create a scheduler called AutoFTPBackupConfig
+/system scheduler
+add interval=1d name=AutoFTPBackupConfig on-event=AutoFTPBackupConfig policy=\
+    ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon \
+    start-date=dec/25/2019 start-time=23:00:00
+
+# create a script called AutoFTPBackupConfig to auto backup the device config	
+/system script
+add name=AutoFTPBackupConfig owner=dnxadm policy=\
+    ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon source="#\
+    \_ftp server\r\
+    \n# configure ftp server, username and password\r\
+    \n :local ftphost \"192.168.105.10\"\r\
+    \n :local ftpuser \"gnu-ftp01\"\r\
+    \n :local ftppassword \"Passw0rd!23\"\r\
+    \n\r\
+    \n# get the current date and time\r\
+    \n:local GDate [/system clock get date]\r\
+    \n:local GDay [ :pick \$GDate 4 6 ]\r\
+    \n:local GMonth [ :pick \$GDate 0 3 ]\r\
+    \n:local GYear [ :pick \$GDate 7 11 ]\r\
+    \n:local GTime [/system clock get time]\r\
+    \n:local GResult \"\$GDay-\$GMonth-\$GYear-\$GTime\"\r\
+    \n\r\
+    \n\r\
+    \n# format the file name for config export\r\
+    \n:local ExportConf ([/system identity get name].\".rsc\")\r\
+    \n:log info \$ExportConf\r\
+    \n\r\
+    \n# backup the existing configuration\r\
+    \n/export compact file=\$ExportConf\r\
+    \n:log info message=\"Config export finished.\"\r\
+    \n\r\
+    \n# upload the configuration to ftp server\r\
+    \n:log info message=\"Uploading config export.\"\r\
+    \n/tool fetch address=\"\$ftphost\" src-path=\$ExportConf user=\"\$ftpuser\
+    \" mode=ftp password=\"\$ftppassword\" dst-path=\"\$GResult-\$ExportConf\"\
+    \_upload=yes\r\
+    \n\r\
+    \n# delay 3 seconds to trigger the upload\r\
+    \n:delay 3s;\r\
+    \n\r\
+    \n# feedback the user if it is completed successfully\r\
+    \n:log info message=\"Configuration backup finished.\";"
