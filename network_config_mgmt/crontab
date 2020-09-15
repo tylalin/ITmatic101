@@ -1,4 +1,6 @@
 @daily /opt/scripts/housekeeping.sh
+0 10 * * * /opt/scripts/diff_report.sh
+0 11 * * 1 /opt/scripts/backup_report.sh
 @weekly /usr/bin/find /configs/cisco -ctime +180 -exec rm {} \;
 @weekly /usr/bin/find /configs/hpe -ctime +180 -exec rm {} \;
 @weekly /usr/bin/find /configs/huawei -ctime +180 -exec rm {} \;
