@@ -1,0 +1,12 @@
+.
+├── backup_reports
+│   └── backup_report_20200917.csv
+├── configs
+│   ├── cisco
+│   ├── fortigate
+│   ├── hpe
+│   ├── huawei
+│   └── mikrotik
+└── scripts
+    ├── backup_report.sh
+    └── housekeeping.sh
