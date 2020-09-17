@@ -21,7 +21,7 @@ do
     else
         echo "$line","File Not Found","Haven't run backup for this device yet","Fail"  >> /backup_reports/backup_report_"$td".csv
     fi
-done < /configs/cisco
+done < /scripts/inventory/cisco
 
 
 # HPE devices' config backup check
@@ -41,7 +41,7 @@ do
     else
         echo "$line","File Not Found","Haven't run backup for this device yet","Fail"  >> /backup_reports/backup_report_"$td".csv
     fi
-done < /configs/hpe
+done < /scripts/inventory/hpe
 
 
 # FortiGate devices' config backup check
@@ -61,7 +61,7 @@ do
     else
         echo "$line","File Not Found","Haven't run backup for this device yet","Fail"  >> /backup_reports/backup_report_"$td".csv
     fi
-done < /configs/fortigate
+done < /scripts/inventory/fortigate
 
 
 # Huawei devices' config backup check
@@ -81,7 +81,7 @@ do
     else
         echo "$line","File Not Found","Haven't run backup for this device yet","Fail"  >> /backup_reports/backup_report_"$td".csv
     fi
-done < /configs/huawei
+done < /scripts/inventory/huawei
 
 
 # MikroTik devices' config backup check
@@ -101,6 +101,6 @@ do
     else
         echo "$line","File Not Found","Haven't run backup for this device yet","Fail"  >> /backup_reports/backup_report_"$td".csv
     fi
-done < /configs/mikrotik
+done < /scripts/inventory/mikrotik
 
 echo "Weekly Config Backup Report for $td" | mailx -s "Backup Report $td" -a "/backup_reports/backup_report_"$td".csv" tyla@itmatic101.com

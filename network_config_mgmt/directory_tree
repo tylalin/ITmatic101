@@ -1,4 +1,3 @@
-.
 ├── backup_reports
 │   └── backup_report_20200917.csv
 ├── configs
@@ -9,4 +8,5 @@
 │   └── mikrotik
 └── scripts
     ├── backup_report.sh
-    └── housekeeping.sh
+    ├── housekeeping.sh
+    └── inventory
