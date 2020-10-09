@@ -1,3 +1,7 @@
+├── config
+│   └── latest
+├── diff_reports
+│   └── changelog_20200929.zip
 ├── backup_reports
 │   └── backup_report_20200917.csv
 ├── configs
@@ -9,4 +13,6 @@
 └── scripts
     ├── backup_report.sh
     ├── housekeeping.sh
-    └── inventory
+    ├── inventory
+    ├── temp
+    └── baseline
