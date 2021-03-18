@@ -1,0 +1,21 @@
+[Interface]
+Address = 192.168.240.1/32
+PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+ListenPort = 51820
+PrivateKey = cN4ITN3S0mS9I0Zkd6/44iqumCjszudM034XMVWllFE=
+
+[Peer]
+# tyla wg
+PublicKey = +cWqJeJxIIMoZ5CTq/jMvukjakeXMSUvcQHKfduNOmA=
+AllowedIPs = 192.168.240.10/32
+
+[Peer]
+# john wg
+PublicKey = FcfbQXLl+YbTJEN0dZeKfGQJ9zX2WinO6xMLoh7UQB8=
+AllowedIPs = 192.168.240.11/32
+
+[Peer]
+# smith wg
+PublicKey = +dWC5xQEfwW0fA89kgz96KWiFWana60dUJD18wKAWQo=
+AllowedIPs = 192.168.240.12/32
