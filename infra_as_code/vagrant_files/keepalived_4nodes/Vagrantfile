@@ -1,0 +1,58 @@
+# -*- mode: ruby -*- 
+# vi: set ft=ruby :
+
+BOX_IMAGE = "bento/ubuntu-20.04"
+NODE_COUNT = 2
+
+Vagrant.configure("2") do |config|
+  (1..NODE_COUNT).each do |x|    
+    config.vm.define "web#{x}" do |subconfig|
+      subconfig.vm.box = BOX_IMAGE
+      subconfig.vm.hostname = "web#{x}"
+      subconfig.vm.network :private_network, ip: "192.168.56.#{x + 10}"     
+      subconfig.vm.provision "shell", inline: <<-Web
+        sudo -i   
+        apt update && sudo apt install -y apache2
+        echo web#{x} > /var/www/html/index.html
+        systemctl enable apache2
+        systemctl start apache2
+      Web
+    end
+  end
+
+  (1..NODE_COUNT).each do |y|     
+    config.vm.define "ha#{y}" do |subconfig|       
+      subconfig.vm.box = BOX_IMAGE       
+      subconfig.vm.hostname = "ha#{y}"       
+      subconfig.vm.network :private_network, ip: "192.168.56.#{y + 20}"     
+      subconfig.vm.provision "shell", inline: <<-Ha
+        sudo -i   
+        apt update && sudo apt install -y haproxy keepalived
+        systemctl enable haproxy keepalived
+        systemctl start haproxy keepalived
+      Ha
+      if (subconfig.vm.hostname=="ha1") then
+        subconfig.vm.provision "file", source: "./keepalived_master.conf", destination: "~/keepalived.conf"
+        subconfig.vm.provision "shell", inline: <<-S1     
+          sudo cp /home/vagrant/keepalived.conf /etc/keepalived/keepalived.conf
+        S1
+      else
+        subconfig.vm.provision "file", source: "./keepalived_backup.conf", destination: "~/keepalived.conf"
+        subconfig.vm.provision "shell", inline: <<-S2
+          sudo cp /home/vagrant/keepalived.conf /etc/keepalived/keepalived.conf
+        S2
+      end
+      subconfig.vm.provision "file", source: "./haproxy.cfg", destination: "~/haproxy.cfg"
+      subconfig.vm.provision "shell", inline: <<-S3
+        sudo rm -f /etc/haproxy/haproxy.cfg
+        sudo cp /home/vagrant/haproxy.cfg /etc/haproxy/haproxy.cfg
+        systemctl restart haproxy keepalived
+      S3
+    end
+  end 
+  # copy ssh public key to the VM and update then reboot
+  config.vm.provision "file", source: "./me.pub", destination: "~/.ssh/me.pub"  
+  config.vm.provision "shell", inline: <<-SHELL     
+    cat /home/vagrant/.ssh/me.pub >> /home/vagrant/.ssh/authorized_keys
+ SHELL
+end
