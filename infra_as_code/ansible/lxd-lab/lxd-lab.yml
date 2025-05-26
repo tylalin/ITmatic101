@@ -1,0 +1,25 @@
+---
+- name: Manage LXD lab
+  hosts: all
+  connection: local
+  gather_facts: false
+  roles:
+    - lxd_manage
+
+- name: Get hostname info
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Wait for ssh to be available
+      ansible.builtin.wait_for_connection:
+        timeout: 300
+        delay: 5
+
+    - name: Read hostname info
+      ansible.builtin.command: hostnamectl
+      register: host
+      changed_when: false
+
+    - name: Display hostname info
+      ansible.builtin.debug:
+        var: host.stdout_lines

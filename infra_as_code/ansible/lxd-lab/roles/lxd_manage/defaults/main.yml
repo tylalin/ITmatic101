@@ -1,0 +1,18 @@
+---
+
+lxd_container_type: "{{ 'virtual-machine' if 'vms' in group_names else 'container' }}"
+lxd_image_src: "https://cloud-images.ubuntu.com/releases/"
+lxd_image: "24.04"
+lxd_profiles: ["default"]
+lxd_wait_for_ipv4: true
+lxd_timeout: 120
+lxd_ssh_user: tyla
+lxd_ssh_pubkey_file: "~/.ssh/id_ed25519.pub"
+
+lxd_container_devices:
+  eth0:
+    nictype: bridged
+    parent: lxdbr0
+    type: nic
+    ipv4.address: "{{ ansible_host }}"
+

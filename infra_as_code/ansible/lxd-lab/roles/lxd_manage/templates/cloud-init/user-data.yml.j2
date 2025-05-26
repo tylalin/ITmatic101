@@ -1,0 +1,7 @@
+#cloud-config
+users:
+  - name: {{ lxd_ssh_user | default('tyla') }}
+    ssh_authorized_keys:
+      - {{ lookup('file', lxd_ssh_pubkey_file | default('~/.ssh/id_ed25519.pub')) }}
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash

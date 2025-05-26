@@ -1,0 +1,15 @@
+---
+galaxy_info:
+  author: Tyla Lin
+  description: Role for deploying LXD instances (containers or VMs)
+  license: MIT
+  min_ansible_version: "2.9"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - lxd
+    - container
+    - virtualization
+dependencies: []
